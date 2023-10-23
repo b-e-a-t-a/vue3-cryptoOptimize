@@ -35,7 +35,7 @@ defineExpose({
 </script>
 
 <template>
-  <input v-model="inputValue" type="text" @input="updateController" />
+  <input v-model="inputValue" type="text" @input="updateController" name="search" id="search" />
 </template>
 
 <style lang="scss" scoped>

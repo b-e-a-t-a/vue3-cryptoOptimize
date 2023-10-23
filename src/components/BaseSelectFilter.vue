@@ -25,7 +25,7 @@ const onChange = (e: Event) => {
 </script>
 
 <template>
-  <select @change="(event) => onChange(event)">
+  <select @change="(event) => onChange(event)" id="filter" name="filter">
     <option
       v-for="(item, i) in props.options"
       :key="`opt-${i}`"

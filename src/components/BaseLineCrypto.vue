@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, inject } from "vue";
+import { computed, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { TCryptoData } from "@/stores/crypto.types";
 import { useCryptoStore } from "@/stores/crypto";
@@ -10,15 +10,15 @@ import useCurrencySymbol from "@/composables/useCurrencySymbol";
 import { ROUTE_CRYPTO_VIEW } from "@/app.routes";
 
 const props = defineProps<{
-    itemId: string,
+  item: Object,
 }>();
 
 const cryptoStore = useCryptoStore();
 
-const { currencyActive, cryptoList, cryptoFavorites } = storeToRefs(cryptoStore);
+const { currencyActive, cryptoFavorites } = storeToRefs(cryptoStore);
 const { addFavorite, removeFavorite } = cryptoStore;
 
-const crypto = ref(cryptoList.value.get(props.itemId) as TCryptoData)
+const crypto = ref(props.item as TCryptoData)
 
 const currencySymbol = computed(() => useCurrencySymbol(currencyActive.value));
 
@@ -74,9 +74,13 @@ const orderedSparkLabels = computed(() => {
     "
   >
     <div class="flex w-20 pl-2 pr-2 items-center">
+      <span
+        v-if="crypto.image === 'missing_large.png'"
+        class="w-8 h-8 border-round rounded-full bg-green"
+      ></span>
       <img
-        v-if="crypto.image"
-        :src="crypto.image"
+        v-else-if="crypto.image"
+        v-lazy="{src: crypto.image}"
         class="w-8 h-8 border-round rounded-full"
       />
       <Spinner v-else color="#DDD" size="small" class="inline-block mx-auto" />
@@ -127,7 +131,7 @@ const orderedSparkLabels = computed(() => {
           "
         />
       </template>
-      <div v-else class="text-sm border-1 text-gray-300">N/A</div>
+      <div v-else class="text-sm border-1 text-gray-300">N/A</div> <!-- never visible -->
     </div>
     <div
       class="flex w-14 items-center justify-center pr-3 cursor-pointer"

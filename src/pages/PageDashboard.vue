@@ -36,6 +36,8 @@ const viewProps = computed(() => {
   }
 })
 
+//console.log('viewprops', viewProps) //10434
+
 </script>
 
 <template>

@@ -14,7 +14,6 @@ import {
   BaseSelectFilter,
   BaseDynamicSorts,
   BaseDynamicList,
-  BaseLineCrypto,
   BaseLoader,
 } from "@/app.organizer";
 import { useCryptoStore } from "@/stores/crypto";
@@ -43,14 +42,13 @@ const cryptoStore = useCryptoStore();
 const {
   currencyActive,
   currenciesList,
-  isReadyCategories,
   isReadyCurrencies,
   isReadyCryptoList,
 } = storeToRefs(cryptoStore);
 
 const { fetchCryptosInfos, setCurrencyActive } = cryptoStore;
 const isReadyCryptoStore = computed(
-  () => isReadyCategories.value && isReadyCurrencies.value && isReadyCryptoList.value
+  () => isReadyCurrencies.value && isReadyCryptoList.value
 );
 
 const itemsByPage = 150;
@@ -58,7 +56,7 @@ const dynamicController = ref() as Ref<typeof BaseDynamicList>;
 const refInputFilter = ref() as Ref<typeof BaseInputFilter>;
 
 const updatePricesForList = ({ newList, oldList }: TEventLists) => {
-  const toUpdatePricesList = newList.filter((e) => {
+  const toUpdatePricesList = newList.filter((e) => { //150
     if (!e.pricesByCurrencies[currencyActive.value]) return true;
     return !oldList.find((f) => e.id === f.id);
   });
@@ -82,14 +80,14 @@ watch(
     if (dynamicController) dynamicController.value.onReset();
   }
 );
-
-onMounted(async () => {
-  fetchCryptosInfos(
-    Array.from(props.cryptoList)
-      .map(([key, value]) => value)
-      .slice(0, itemsByPage)
-  );
-});
+// not needed because of watch in BaseDynamicList
+// onMounted(async () => {
+//   fetchCryptosInfos(
+//     Array.from(props.cryptoList)
+//       .map(([key, value]) => value)
+//       .slice(0, itemsByPage)
+//   );
+// });
 </script>
 
 <template>
@@ -138,7 +136,7 @@ onMounted(async () => {
         ref="dynamicController"
         :items="props.cryptoList"
         :items-by-bloc="itemsByPage"
-        :component="BaseLineCrypto"
+        :component="props.component"
         :watcher="currencyActive"
         :no-result-text="print('no_result')"
         :loader-color="App?.theme.value === 'dark' ? 'white' : 'black'"

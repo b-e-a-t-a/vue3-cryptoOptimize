@@ -25,20 +25,18 @@ const {
 
 const {
   currencyActive,
-  currenciesList,
   cryptoList,
-  isReadyCategories,
   isReadyCurrencies,
   isReadyCryptoList,
 } = storeToRefs(cryptoStore);
 
 const isReadyCryptoStore = computed(
-  () => isReadyCategories.value && isReadyCurrencies.value && isReadyCryptoList.value
+  () => isReadyCurrencies.value && isReadyCryptoList.value
 );
 
 const { t: print }= useI18n();
 
-watch(isReadyCryptoStore, (newState) => { 
+watch(isReadyCryptoStore, (newState) => {
   if (newState && id && registerItem()) fetchItemInfos();
 });
 
@@ -49,7 +47,7 @@ watch(currencyActive, (newCrypto) => {
 
 const registerItem = () => {
   const storeItem = cryptoList.value.get(id as string);
-  if (storeItem) { 
+  if (storeItem) {
     item.value = storeItem;
     return true
   }
@@ -58,9 +56,9 @@ const registerItem = () => {
     return false;
   }
 }
-const fetchItemInfos = () => { 
+const fetchItemInfos = () => {
   if (item.value) fetchCryptosInfos([item.value])
-} 
+}
 
 onMounted(() => {
   if (isReadyCryptoStore.value) {
@@ -74,7 +72,7 @@ onMounted(() => {
 <template>
   <div v-if="!isReadyCryptoStore || !item" class="flex flex-1 relative">
     <BaseLoader :text="print('loading_data')" />
-    {{  isReadyCryptoStore ?'tru' :'false' }}
+    {{  isReadyCryptoStore ? 'true' :'false' }} <!-- ???  -->
   </div>
   <div v-else-if="isReadyCryptoStore && item" class="flex flex-1 relative">
     <BaseCardCrypto :data="item" :item-id="item.id" />

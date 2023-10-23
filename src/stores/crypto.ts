@@ -5,7 +5,6 @@ import { LOCALSTORAGE_CRYPTO_CURRENCY, LOCALSTORAGE_CRYPTO_FAVORITES } from "@/a
 import type {
   TCryptoDefaultStates,
   TCryptoData,
-  TEntryCategoryData,
   TEntryCryptoData,
 } from "./crypto.types";
 
@@ -18,17 +17,11 @@ export const useCryptoStore = defineStore({
     ({
       cryptoList: new Map<string, TCryptoData>(),
       currenciesList: [],
-      categoriesList: [],
       currencyActive: useLocalStorage.get(LOCALSTORAGE_CRYPTO_CURRENCY) || 'eur',
-      categoryActive: null,
       cryptoFavorites: _loadFavorites(),
     } as TCryptoDefaultStates),
 
   getters: {
-    
-    isReadyCategories(state: TCryptoDefaultStates) {
-      return state.categoriesList.length ? true : false;
-    },
     isReadyCurrencies(state: TCryptoDefaultStates) {
       return state.currenciesList.length ? true : false;
     },
@@ -51,23 +44,6 @@ export const useCryptoStore = defineStore({
           );
           if (response.data.length) this.currenciesList = response.data;
           useLocalStorage.set("temp_currencies", response.data);
-        }
-      }
-    },
-
-    async fetchCategoriesList(): Promise<void> {
-      if (!this.isReadyCategories) {
-        //DevNote: It's for cache API request for dev and not pay it ...
-        const cacheCategories = useLocalStorage.get("temp_categories");
-
-        if (cacheCategories && Object.entries(cacheCategories).length) this.categoriesList = cacheCategories;
-        else {
-          const response = await axios.get(`${URL_API}/coins/categories/list`);
-          if (response.data.length)
-            response.data.forEach((e: TEntryCategoryData) => {
-              this.categoriesList.push({ id: e.category_id, name: e.name });
-            });
-          useLocalStorage.set("temp_categories", this.categoriesList);
         }
       }
     },
@@ -108,7 +84,7 @@ export const useCryptoStore = defineStore({
           sparkline: true,
         };
 
-        const response = await axios.get(`${URL_API}/coins/markets`, {
+        const response = await axios.get(`api/coins/markets`, {
           params: query,
         });
 
@@ -130,7 +106,7 @@ export const useCryptoStore = defineStore({
                   price_change_24h: value.price_change_24h,
                 };
                 this.cryptoList.set(key, item);
-                if (this.cryptoFavorites.get(key)) this.cryptoFavorites.set(key, item);
+                if (this.cryptoFavorites.get(key)) this.cryptoFavorites.set(key, item); //10442 size
               }
             });
           }

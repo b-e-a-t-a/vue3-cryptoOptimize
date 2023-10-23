@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch, DefineComponent, defineExpose, VNodeRef } from "vue";
-import { useInfiniteScroll } from "@vueuse/core";
+import { useInfiniteScroll, useScroll } from "@vueuse/core";
 import { Spinner } from "@/app.organizer";
 import { TDynamicSort } from "./BaseDynamicSorts.vue";
-import { useScroll } from '@vueuse/core'
 import { TCryptoData } from "@/stores/crypto.types";
 
 
@@ -57,15 +56,15 @@ const filteredList = computed(() => {
   })
 })
 
-const optimizedList = computed(() => { 
+const optimizedList = computed(() => {
   return filteredList.value.slice(0, blocCurrent.value * props.itemsByBloc)
 })
 
 const orderedList = computed<TCryptoData[]>(() => {
   try {
-  let ordered = optimizedList.value.sort(dynamicSorter.value.sorter);
-  if (dynamicSorter.value.order === "desc") ordered = ordered.reverse();
-  return ordered;
+    let ordered = optimizedList.value.sort(dynamicSorter.value.sorter);
+    if (dynamicSorter.value.order === "desc") ordered = ordered.reverse();
+    return ordered;
   }
   catch(e) {
     console.warn(e);
@@ -115,7 +114,7 @@ watch(
   }
 );
 
-useScroll(scroller, { behavior: 'smooth' })
+useScroll(scroller, { behavior: 'smooth' }) //needed?? why not el.scrollIntoView() ?
 
 useInfiniteScroll(
   scroller,
@@ -141,7 +140,7 @@ defineExpose({
   <div
     ref="scroller"
     class="scroller h-10 overflow-y-scroll flex-auto"
-  > 
+  >
     <div
       v-if="!orderedList.length"
       class="flex flex-1 h-full text-4xl font-bold justify-center items-center"
@@ -155,7 +154,7 @@ defineExpose({
         :is="props.component"
         v-for="item in orderedList"
         :key="`${item[props.componentKey]}`"
-        :item-id="item.id"
+        :item="item"
       />
     </template>
   </div>

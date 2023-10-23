@@ -30,10 +30,10 @@ const goBackHistory = () => {
       <template v-if="haveHistoryNavigation">
         <div
           :to="{ name: ROUTE_CRYPTO_OVERVIEW.name }"
-          class="mt-5 text-gray-400 dark:text-gray-600 text-xs underline"
+          class="mt-5 text-gray-400 dark:text-gray-600 text-xs underline cursor-pointer"
           @click="(event) => goBackHistory()"
         >
-          Or click where to go back in your router history
+          Or click where to go back in your router history <!-- translation ?? -->
         </div>
       </template>
       <div class="mt-2 text-dark text-gray-300 dark:text-gray-600 text-xs">(It's better in production to adapt meta head for SEO, and auto-redirect.)</div>

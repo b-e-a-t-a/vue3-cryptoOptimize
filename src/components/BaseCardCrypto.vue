@@ -30,9 +30,9 @@ const chartElement = ref();
 const { t: print } = useI18n();
 
 const isInFavorites = computed(() => {
-        if (crypto.value)
-            !!cryptoFavorites.value.get(crypto.value.id)
-        return false;
+  if (crypto.value)
+    return !!cryptoFavorites.value.get(crypto.value.id)
+  return false;
 })
 
 

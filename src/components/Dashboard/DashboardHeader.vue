@@ -42,7 +42,7 @@ watch(currentRouteName, () => {
         <div class="flex items-center">
           <img
             src="https://www.iconpacks.net/icons/2/free-cryptocurrency-coin-icon-2422-thumb.png"
-            class="mr-3 h-6 sm:h-9 dark:invert"
+            class="mr-3 h-6 sm:h-9 dark:invert w-auto"
             alt="Cryptoleet logo"
           />
           <span
@@ -130,19 +130,21 @@ watch(currentRouteName, () => {
             class="flag"
             width="40px"
             @click="() => changeLanguage('fr')"
-            :is-active="App.lang.value === 'fr'"
+            :is-active="activeLanguage === 'fr'"
           />
           <Flag
             :type="'en'"
             class="flag"
             width="40px"
             @click="() => changeLanguage('en')"
-            :is-active="App.lang.value === 'en'"
+            :is-active="activeLanguage === 'en'"
           />
         </div>
         <div class="hidden lg:flex lg:order-3">
           <label class="inline-flex relative items-center cursor-pointer">
             <input
+              id="mode"
+              name="mode"
               type="checkbox"
               :checked="App.theme.value === 'light' ? true : false"
               @input="

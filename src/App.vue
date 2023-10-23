@@ -15,14 +15,12 @@
   locale.value = App.lang.value;
   
   const {
-    fetchCategoriesList,
     fetchCurrenciesList,
     fetchCryptoList,
   } = useCryptoStore();
   
   onMounted(() => {
     fetchCurrenciesList();
-    fetchCategoriesList()
     fetchCryptoList();
   })
 </script>

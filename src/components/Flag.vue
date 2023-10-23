@@ -24,7 +24,7 @@ const imageSource = new URL(`../assets/img/flags/${props.type}.png`, import.meta
       :class="{ isloading: props.isLoading, active: props.isActive }"
       class="el-flags"
       :src="imageSource"
-      style="width: 100%"
+      style="width: 100%, height: auto"
     />
   </div>
 </template>
