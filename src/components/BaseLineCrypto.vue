@@ -36,7 +36,7 @@ const toggleFavorite = () => {
 };
 
 useIntersectionObserver(chartElement, ([{ isIntersecting }]) => {
-  chartIsVisible.value = true;
+  chartIsVisible.value = isIntersecting;
 });
 
 const calculatedSparkline = computed(() => {
@@ -131,7 +131,7 @@ const orderedSparkLabels = computed(() => {
           "
         />
       </template>
-      <div v-else class="text-sm border-1 text-gray-300">N/A</div> <!-- never visible -->
+      <div v-else class="text-sm border-1 text-gray-300">N/A</div>
     </div>
     <div
       class="flex w-14 items-center justify-center pr-3 cursor-pointer"

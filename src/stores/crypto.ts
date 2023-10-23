@@ -106,7 +106,7 @@ export const useCryptoStore = defineStore({
                   price_change_24h: value.price_change_24h,
                 };
                 this.cryptoList.set(key, item);
-                if (this.cryptoFavorites.get(key)) this.cryptoFavorites.set(key, item); //10442 size
+                if (this.cryptoFavorites.get(key)) this.cryptoFavorites.set(key, item);
               }
             });
           }

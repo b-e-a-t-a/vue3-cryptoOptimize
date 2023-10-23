@@ -54,13 +54,26 @@ const isReadyCryptoStore = computed(
 const itemsByPage = 150;
 const dynamicController = ref() as Ref<typeof BaseDynamicList>;
 const refInputFilter = ref() as Ref<typeof BaseInputFilter>;
+const isFetching = ref(false);
+let timeoutUpdatePricesForList: NodeJS.Timeout;
 
 const updatePricesForList = ({ newList, oldList }: TEventLists) => {
-  const toUpdatePricesList = newList.filter((e) => { //150
+  const toUpdatePricesList = newList.filter((e) => {
     if (!e.pricesByCurrencies[currencyActive.value]) return true;
     return !oldList.find((f) => e.id === f.id);
   });
-  fetchCryptosInfos(toUpdatePricesList);
+  if (isFetching.value === false) {
+    isFetching.value = true;
+    clearTimeout(timeoutUpdatePricesForList);
+    fetchCryptosInfos(toUpdatePricesList).then(() => {
+      timeoutUpdatePricesForList = setTimeout(() => {
+        isFetching.value = false;
+      }, 500)
+    })
+    .catch((err) => {
+      console.warn(err);
+    })
+  }
 };
 
 const currenciesListOptions = computed(() => {
@@ -80,14 +93,6 @@ watch(
     if (dynamicController) dynamicController.value.onReset();
   }
 );
-// not needed because of watch in BaseDynamicList
-// onMounted(async () => {
-//   fetchCryptosInfos(
-//     Array.from(props.cryptoList)
-//       .map(([key, value]) => value)
-//       .slice(0, itemsByPage)
-//   );
-// });
 </script>
 
 <template>

@@ -72,7 +72,7 @@ onMounted(() => {
 <template>
   <div v-if="!isReadyCryptoStore || !item" class="flex flex-1 relative">
     <BaseLoader :text="print('loading_data')" />
-    {{  isReadyCryptoStore ? 'true' :'false' }} <!-- ???  -->
+    {{  isReadyCryptoStore ? 'true' :'false' }}
   </div>
   <div v-else-if="isReadyCryptoStore && item" class="flex flex-1 relative">
     <BaseCardCrypto :data="item" :item-id="item.id" />
